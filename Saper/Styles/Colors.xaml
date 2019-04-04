@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Saper">
+
+    <!-- Basic Colors-->   
+    <Color x:Key="BackgroundLight">#efefef</Color>
+    <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}" />
+
+    <Color x:Key="BackgroundLighter">#fafafa</Color>
+    <SolidColorBrush x:Key="BackgroundLighterBrush" Color="{StaticResource BackgroundLighter}" />
+
+    <Color x:Key="ForegroundMain">#686868</Color>
+    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}" />
+
+    <Color x:Key="ForegroundBlack">#000000</Color>
+    <SolidColorBrush x:Key="ForegroundBlackBrush" Color="{StaticResource ForegroundBlack}" />
+
+    <Color x:Key="ForegroundWhite">#ffffff</Color>
+    <SolidColorBrush x:Key="ForegroundWhiteBrush" Color="{StaticResource ForegroundWhite}" />
+
+    <!-- Blue Base-->
+    <Color x:Key="BackgroundBlueBase">#6B6E8E</Color>
+    <SolidColorBrush x:Key="BackgroundBlueBaseBrush" Color="{StaticResource BackgroundBlueBase}" />
+
+    <Color x:Key="BackgroundVeryLightBlue">#E3E5F7</Color>
+    <SolidColorBrush x:Key="BackgroundVeryLightBlueBrush" Color="{StaticResource BackgroundVeryLightBlue}" />
+
+    <Color x:Key="BackgroundVeryDarkBlue">#1E2034</Color>
+    <SolidColorBrush x:Key="BackgroundVeryDarkBlueBrush" Color="{StaticResource BackgroundVeryDarkBlue}" />
+
+    <Color x:Key="BackgroundDarkBlue">#454866</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBlueBrush" Color="{StaticResource BackgroundDarkBlue}" />
+
+    <Color x:Key="BackgroundLightBlue">#ABAEC6</Color>
+    <SolidColorBrush x:Key="BackgroundLightBlueBrush" Color="{StaticResource BackgroundLightBlue}" />
+
+    <!-- Brown Base-->
+    <Color x:Key="BackgroundBrownBase">#CEBE92</Color>
+    <SolidColorBrush x:Key="BackgroundBrownBaseBrush" Color="{StaticResource BackgroundBrownBase}" />
+
+    <Color x:Key="BackgroundLightBrownBase">#FFF4D8</Color>
+    <SolidColorBrush x:Key="BackgroundLightBrownBaseBrush" Color="{StaticResource BackgroundLightBrownBase}" />
+
+    <Color x:Key="BackgroundVeryLightBrownBase">#FFF8E6</Color>
+    <SolidColorBrush x:Key="BackgroundVeryLightBrownBaseBrush" Color="{StaticResource BackgroundVeryLightBrownBase}" />
+
+    <Color x:Key="BackgroundDarkBrownBase">#94845C</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBrownBaseBrush" Color="{StaticResource BackgroundDarkBrownBase}" />
+
+    <Color x:Key="BackgroundVeryDarkBrownBase">#4B4127</Color>
+    <SolidColorBrush x:Key="BackgroundVeryDarkBrownBaseBrush" Color="{StaticResource BackgroundVeryDarkBrownBase}" />
+    
+</ResourceDictionary>

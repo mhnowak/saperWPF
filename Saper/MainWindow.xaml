@@ -1,0 +1,295 @@
+﻿<Window x:Class="Saper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Saper"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Icon="Images/Logo/Bomb-Icon.png"
+        ResizeMode="NoResize"
+        Title="Pseudo-Saper" 
+        Height="800"
+        Width="560">
+
+    <Window.Resources>
+
+        <Style TargetType="{x:Type local:MainWindow}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <!-- Outer border with the dropshadow margin -->
+                        <Border Padding="10">
+
+                            <!-- Main window outline -->
+                            <Grid>
+                                <!-- Opacity mask on grid -->
+                                <Border x:Name="Container" Background="{StaticResource BackgroundBlueBaseBrush}" 
+                                        CornerRadius="10"/>
+
+                                <!-- Window border and dropshadow -->
+                                <Border CornerRadius="10"
+                                        Background="{StaticResource BackgroundBlueBaseBrush}">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.6"/>
+                                    </Border.Effect>
+                                </Border>
+
+                                <!-- Main window content -->
+                                <Grid>
+
+                                    <!-- Corner Clipping -->
+                                    <Grid.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=Container}"/>
+                                    </Grid.OpacityMask>
+
+                                    <Grid.RowDefinitions>
+                                        <!-- Title Bar -->
+                                        <RowDefinition Height="42"/>
+                                        <!-- Drop shadow -->
+                                        <RowDefinition Height="Auto"/>
+                                        <!-- Content -->
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Title bar -->
+                                    <Grid Grid.Column="0" Panel.ZIndex="1">
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Title -->
+                                            <ColumnDefinition Width="*"/>
+                                            <!-- Window Buttons -->
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Icon -->
+                                        <Button Command="{Binding LogoCommand}" Style="{StaticResource LogoButton}">
+                                            <Image Source="Images/Logo/Bomb-Icon-Small.png"/>
+                                        </Button>
+
+                                        <!-- Title -->
+                                        <Viewbox Grid.Column="0" Grid.ColumnSpan="3" Margin="0">
+                                            <TextBlock Style="{StaticResource HeaderText}"
+                                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                       Path=Title}" />
+                                        </Viewbox>
+
+                                        <!-- Window Buttons -->
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Button Command="{Binding MinimizeCommand}"
+                                                    Style="{StaticResource WindowControlButton}" Content="_"/>
+                                            <Button Command="{Binding CloseCommand}"
+                                                    Style="{StaticResource WindowCloseButton}" Content="x"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Drop shadow -->
+                                    <Border Grid.Row="1" Height="2" Background="{StaticResource ForegroundWhiteBrush}"/>
+
+
+                                    <Border Grid.Row="2" Padding="0">
+                                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                                    </Border>
+
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+            ResizeBorderThickness="10"
+            CaptionHeight="42"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            />
+    </WindowChrome.WindowChrome>
+
+    <Grid Background="{StaticResource BackgroundLightBlueBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="60 20" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Actual score -->
+                <TextBlock TextAlignment="Center" Margin="0 5" Opacity="1"
+                           FontFamily="{StaticResource OpenSansRegular}" FontSize="32"
+                           Foreground="{StaticResource BackgroundVeryDarkBlueBrush}"
+                           Grid.Column="0">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0:##}:{1:##}">
+                            <Binding Path="MinsS"/>
+                            <Binding Path="SecsS"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <!-- Flag -->
+                <CheckBox Style="{StaticResource FlagBox}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding FlagBool}">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="3" ScaleY="3"/>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+                <!-- How many rounds you survived-->
+                <TextBlock Text="{Binding FlagsCount, StringFormat=Bombs: {0}}" TextAlignment="Center" Margin="0 5" Opacity="1"
+                           FontFamily="{StaticResource OpenSansRegular}" FontSize="32"
+                           Foreground="{StaticResource BackgroundVeryDarkBlueBrush}"
+                           Grid.Column="2"/>
+
+            </Grid>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <!-- 10x10 Squares -->
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Button in every square -->
+            <Button Content="{Binding SquareValue[0]}" Style="{StaticResource SquareButton}" CommandParameter="0" Grid.Column="0" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[1]}" Style="{StaticResource SquareButton}" CommandParameter="1" Grid.Column="0" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[2]}" Style="{StaticResource SquareButton}" CommandParameter="2" Grid.Column="0" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[3]}" Style="{StaticResource SquareButton}" CommandParameter="3" Grid.Column="0" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[4]}" Style="{StaticResource SquareButton}" CommandParameter="4" Grid.Column="0" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[5]}" Style="{StaticResource SquareButton}" CommandParameter="5" Grid.Column="0" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[6]}" Style="{StaticResource SquareButton}" CommandParameter="6" Grid.Column="0" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[7]}" Style="{StaticResource SquareButton}" CommandParameter="7" Grid.Column="0" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[8]}" Style="{StaticResource SquareButton}" CommandParameter="8" Grid.Column="0" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[9]}" Style="{StaticResource SquareButton}" CommandParameter="9" Grid.Column="0" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[10]}" Style="{StaticResource SquareButton}" CommandParameter="10" Grid.Column="1" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[11]}" Style="{StaticResource SquareButton}" CommandParameter="11" Grid.Column="1" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[12]}" Style="{StaticResource SquareButton}" CommandParameter="12" Grid.Column="1" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[13]}" Style="{StaticResource SquareButton}" CommandParameter="13" Grid.Column="1" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[14]}" Style="{StaticResource SquareButton}" CommandParameter="14" Grid.Column="1" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[15]}" Style="{StaticResource SquareButton}" CommandParameter="15" Grid.Column="1" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[16]}" Style="{StaticResource SquareButton}" CommandParameter="16" Grid.Column="1" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[17]}" Style="{StaticResource SquareButton}" CommandParameter="17" Grid.Column="1" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[18]}" Style="{StaticResource SquareButton}" CommandParameter="18" Grid.Column="1" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[19]}" Style="{StaticResource SquareButton}" CommandParameter="19" Grid.Column="1" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[20]}" Style="{StaticResource SquareButton}" CommandParameter="20" Grid.Column="2" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[21]}" Style="{StaticResource SquareButton}" CommandParameter="21" Grid.Column="2" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[22]}" Style="{StaticResource SquareButton}" CommandParameter="22" Grid.Column="2" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[23]}" Style="{StaticResource SquareButton}" CommandParameter="23" Grid.Column="2" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[24]}" Style="{StaticResource SquareButton}" CommandParameter="24" Grid.Column="2" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[25]}" Style="{StaticResource SquareButton}" CommandParameter="25" Grid.Column="2" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[26]}" Style="{StaticResource SquareButton}" CommandParameter="26" Grid.Column="2" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[27]}" Style="{StaticResource SquareButton}" CommandParameter="27" Grid.Column="2" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[28]}" Style="{StaticResource SquareButton}" CommandParameter="28" Grid.Column="2" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[29]}" Style="{StaticResource SquareButton}" CommandParameter="29" Grid.Column="2" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[30]}" Style="{StaticResource SquareButton}" CommandParameter="30" Grid.Column="3" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[31]}" Style="{StaticResource SquareButton}" CommandParameter="31" Grid.Column="3" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[32]}" Style="{StaticResource SquareButton}" CommandParameter="32" Grid.Column="3" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[33]}" Style="{StaticResource SquareButton}" CommandParameter="33" Grid.Column="3" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[34]}" Style="{StaticResource SquareButton}" CommandParameter="34" Grid.Column="3" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[35]}" Style="{StaticResource SquareButton}" CommandParameter="35" Grid.Column="3" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[36]}" Style="{StaticResource SquareButton}" CommandParameter="36" Grid.Column="3" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[37]}" Style="{StaticResource SquareButton}" CommandParameter="37" Grid.Column="3" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[38]}" Style="{StaticResource SquareButton}" CommandParameter="38" Grid.Column="3" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[39]}" Style="{StaticResource SquareButton}" CommandParameter="39" Grid.Column="3" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[40]}" Style="{StaticResource SquareButton}" CommandParameter="40" Grid.Column="4" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[41]}" Style="{StaticResource SquareButton}" CommandParameter="41" Grid.Column="4" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[42]}" Style="{StaticResource SquareButton}" CommandParameter="42" Grid.Column="4" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[43]}" Style="{StaticResource SquareButton}" CommandParameter="43" Grid.Column="4" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[44]}" Style="{StaticResource SquareButton}" CommandParameter="44" Grid.Column="4" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[45]}" Style="{StaticResource SquareButton}" CommandParameter="45" Grid.Column="4" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[46]}" Style="{StaticResource SquareButton}" CommandParameter="46" Grid.Column="4" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[47]}" Style="{StaticResource SquareButton}" CommandParameter="47" Grid.Column="4" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[48]}" Style="{StaticResource SquareButton}" CommandParameter="48" Grid.Column="4" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[49]}" Style="{StaticResource SquareButton}" CommandParameter="49" Grid.Column="4" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[50]}" Style="{StaticResource SquareButton}" CommandParameter="50" Grid.Column="5" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[51]}" Style="{StaticResource SquareButton}" CommandParameter="51" Grid.Column="5" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[52]}" Style="{StaticResource SquareButton}" CommandParameter="52" Grid.Column="5" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[53]}" Style="{StaticResource SquareButton}" CommandParameter="53" Grid.Column="5" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[54]}" Style="{StaticResource SquareButton}" CommandParameter="54" Grid.Column="5" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[55]}" Style="{StaticResource SquareButton}" CommandParameter="55" Grid.Column="5" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[56]}" Style="{StaticResource SquareButton}" CommandParameter="56" Grid.Column="5" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[57]}" Style="{StaticResource SquareButton}" CommandParameter="57" Grid.Column="5" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[58]}" Style="{StaticResource SquareButton}" CommandParameter="58" Grid.Column="5" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[59]}" Style="{StaticResource SquareButton}" CommandParameter="59" Grid.Column="5" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[60]}" Style="{StaticResource SquareButton}" CommandParameter="60" Grid.Column="6" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[61]}" Style="{StaticResource SquareButton}" CommandParameter="61" Grid.Column="6" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[62]}" Style="{StaticResource SquareButton}" CommandParameter="62" Grid.Column="6" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[63]}" Style="{StaticResource SquareButton}" CommandParameter="63" Grid.Column="6" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[64]}" Style="{StaticResource SquareButton}" CommandParameter="64" Grid.Column="6" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[65]}" Style="{StaticResource SquareButton}" CommandParameter="65" Grid.Column="6" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[66]}" Style="{StaticResource SquareButton}" CommandParameter="66" Grid.Column="6" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[67]}" Style="{StaticResource SquareButton}" CommandParameter="67" Grid.Column="6" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[68]}" Style="{StaticResource SquareButton}" CommandParameter="68" Grid.Column="6" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[69]}" Style="{StaticResource SquareButton}" CommandParameter="69" Grid.Column="6" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[70]}" Style="{StaticResource SquareButton}" CommandParameter="70" Grid.Column="7" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[71]}" Style="{StaticResource SquareButton}" CommandParameter="71" Grid.Column="7" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[72]}" Style="{StaticResource SquareButton}" CommandParameter="72" Grid.Column="7" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[73]}" Style="{StaticResource SquareButton}" CommandParameter="73" Grid.Column="7" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[74]}" Style="{StaticResource SquareButton}" CommandParameter="74" Grid.Column="7" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[75]}" Style="{StaticResource SquareButton}" CommandParameter="75" Grid.Column="7" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[76]}" Style="{StaticResource SquareButton}" CommandParameter="76" Grid.Column="7" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[77]}" Style="{StaticResource SquareButton}" CommandParameter="77" Grid.Column="7" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[78]}" Style="{StaticResource SquareButton}" CommandParameter="78" Grid.Column="7" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[79]}" Style="{StaticResource SquareButton}" CommandParameter="79" Grid.Column="7" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[80]}" Style="{StaticResource SquareButton}" CommandParameter="80" Grid.Column="8" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[81]}" Style="{StaticResource SquareButton}" CommandParameter="81" Grid.Column="8" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[82]}" Style="{StaticResource SquareButton}" CommandParameter="82" Grid.Column="8" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[83]}" Style="{StaticResource SquareButton}" CommandParameter="83" Grid.Column="8" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[84]}" Style="{StaticResource SquareButton}" CommandParameter="84" Grid.Column="8" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[85]}" Style="{StaticResource SquareButton}" CommandParameter="85" Grid.Column="8" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[86]}" Style="{StaticResource SquareButton}" CommandParameter="86" Grid.Column="8" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[87]}" Style="{StaticResource SquareButton}" CommandParameter="87" Grid.Column="8" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[88]}" Style="{StaticResource SquareButton}" CommandParameter="88" Grid.Column="8" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[89]}" Style="{StaticResource SquareButton}" CommandParameter="89" Grid.Column="8" Grid.Row="9"/>
+
+            <Button Content="{Binding SquareValue[90]}" Style="{StaticResource SquareButton}" CommandParameter="90" Grid.Column="9" Grid.Row="0"/>
+            <Button Content="{Binding SquareValue[91]}" Style="{StaticResource SquareButton}" CommandParameter="91" Grid.Column="9" Grid.Row="1"/>
+            <Button Content="{Binding SquareValue[92]}" Style="{StaticResource SquareButton}" CommandParameter="92" Grid.Column="9" Grid.Row="2"/>
+            <Button Content="{Binding SquareValue[93]}" Style="{StaticResource SquareButton}" CommandParameter="93" Grid.Column="9" Grid.Row="3"/>
+            <Button Content="{Binding SquareValue[94]}" Style="{StaticResource SquareButton}" CommandParameter="94" Grid.Column="9" Grid.Row="4"/>
+            <Button Content="{Binding SquareValue[95]}" Style="{StaticResource SquareButton}" CommandParameter="95" Grid.Column="9" Grid.Row="5"/>
+            <Button Content="{Binding SquareValue[96]}" Style="{StaticResource SquareButton}" CommandParameter="96" Grid.Column="9" Grid.Row="6"/>
+            <Button Content="{Binding SquareValue[97]}" Style="{StaticResource SquareButton}" CommandParameter="97" Grid.Column="9" Grid.Row="7"/>
+            <Button Content="{Binding SquareValue[98]}" Style="{StaticResource SquareButton}" CommandParameter="98" Grid.Column="9" Grid.Row="8"/>
+            <Button Content="{Binding SquareValue[99]}" Style="{StaticResource SquareButton}" CommandParameter="99" Grid.Column="9" Grid.Row="9"/>
+
+        </Grid>
+
+    </Grid>
+</Window>
